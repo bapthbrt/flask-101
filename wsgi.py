@@ -12,4 +12,12 @@ def hello():
 
 @app.route('/api/v1/products')
 def get_products():
-    return jsonify([{'id': 1, 'name': 'Skello'}, {'id': 2, 'name': 'Socialive.tv'}])
+    return jsonify([
+        {
+            'id': 1, 'name': 'Skello'
+        }, {
+            'id': 2, 'name': 'Socialive.tv'
+        }, {
+            'id': 3, 'name': 'Test'
+        }
+    ])
