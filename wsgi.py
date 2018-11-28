@@ -1,6 +1,6 @@
 # wsgi.py
 from flask import Flask, jsonify, request
-
+from counter import Counter
 
 app = Flask(__name__)
 
@@ -15,14 +15,21 @@ PRODUCTS = [
             'id': 4, 'name': 'Toto'
         }
     ]
+counter = Counter()
+counter.id = 4
+
 
 @app.route('/')
 def hello():
     return "Hello World!"
 
 
-@app.route('/api/v1/products')
+@app.route('/api/v1/products', methods=['GET', 'POST'])
 def get_products():
+    if request.method == 'POST':
+        product = {"id": counter.next(), "name": request.get_json()['name']}
+        PRODUCTS.append(product)
+        return jsonify(product), 201
     return jsonify(PRODUCTS)
 
 
