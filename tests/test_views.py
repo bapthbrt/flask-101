@@ -26,3 +26,5 @@ class TestViews(TestCase):
     def test_product_delete(self):
         response = self.client.delete("/api/v1/products/1")
         self.assertEqual(response.status_code, 204)
+        response = self.client.get("/api/v1/products/1")
+        self.assertEqual(response.status_code, 404)
