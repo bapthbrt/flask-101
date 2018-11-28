@@ -29,4 +29,4 @@ def get_product(id):
     for i in range(len(PRODUCTS)):
         if PRODUCTS[i].get('id') == id:
             return jsonify(PRODUCTS[i])
-    return '', 404
+    return 'Product not found', 404
