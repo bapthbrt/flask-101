@@ -33,13 +33,19 @@ def get_products():
     return jsonify(PRODUCTS)
 
 
-@app.route('/api/v1/products/<int:id>', methods=['GET', 'DELETE'])
+@app.route('/api/v1/products/<int:id>', methods=['GET', 'DELETE', 'PATCH'])
 def get_product(id):
-    for i in range(len(PRODUCTS)):
-        if PRODUCTS[i].get('id') == id:
+    for product in PRODUCTS:
+        if product.get('id') == id:
             if request.method == 'GET':
-                return jsonify(PRODUCTS[i]), 200
+                return jsonify(product), 200
+            if request.method == 'PATCH':
+                if request.get_json()['name']:
+                    product['name'] = request.get_json()['name']
+                    return '', 204
+                else:
+                    return '', 422
             if request.method == 'DELETE':
-                del PRODUCTS[i]
+                PRODUCTS.remove(product)
                 return '', 204
     return 'Product not found', 404

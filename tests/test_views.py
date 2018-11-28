@@ -1,5 +1,6 @@
 # tests/test_views.py
-from flask import json
+import json
+
 from flask_testing import TestCase
 from wsgi import app
 
@@ -31,7 +32,20 @@ class TestViews(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_product_create(self):
-        response = self.client.post("/api/v1/products", data=json.dumps(dict(name='Genial')), content_type='application/json')
+        response = self.client.post("/api/v1/products", data=json.dumps({'name': 'Genial'}), content_type='application/json')
         self.assertEqual(response.status_code, 201)
         product = response.json
         self.assertIsInstance(product, dict)
+
+    def test_product_update(self):
+        response = self.client.patch("/api/v1/products/2", data=json.dumps(dict(name='Je suis un update')), content_type='application/json')
+        self.assertEqual(response.status_code, 204)
+        response = self.client.get("/api/v1/products/2")
+        self.assertEqual(response.status_code, 200)
+        product = response.json
+        self.assertIsInstance(product, dict)
+        self.assertEqual(product['name'], 'Je suis un update')
+
+    def test_product_update_invalid(self):
+        response = self.client.patch("/api/v1/products/2", data=json.dumps(dict(name='')), content_type='application/json')
+        self.assertEqual(response.status_code, 422)
